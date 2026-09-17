@@ -166,7 +166,7 @@ async function requestEmailOtp() {
   btn.disabled=true; btn.textContent="Sending...";
   try {
     const r=await carelinkPost({action:"sendEmailOtp", email:email});
-    if(!r.ok) throw new Error(r.error || "Unable to send OTP.");
+    if(!r.ok) throw new Error((r.stage ? "["+r.stage+"] " : "")+(r.error || "Unable to send OTP."));
     alert("Verification code sent. Please check your email, including your Spam folder.");
   } catch(e) { alert(e.message); }
   finally {btn.disabled=false;btn.textContent="Send OTP";}
@@ -180,7 +180,7 @@ async function confirmEmailOtp() {
   btn.disabled=true;btn.textContent="Verifying...";
   try {
     const r=await carelinkPost({action:"verifyEmailOtp",email:email,otp:otp});
-    if(!r.ok) throw new Error(r.error || "Incorrect or expired OTP.");
+    if(!r.ok) throw new Error((r.stage ? "["+r.stage+"] " : "")+(r.error || "Incorrect or expired OTP."));
     carelinkEmailVerified=true;
     emailOK=true;
     document.querySelector("#emailVerified").classList.add("show");
