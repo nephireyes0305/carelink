@@ -37,12 +37,11 @@ body{background:#f2f7f6;color:#314b55}.reg-header{background:#fff;border-bottom:
  <div class="reg-actions"><button class="secondary back">Back</button><button class="primary next-details">Continue to Verification</button></div>
 </section>
 <section class="reg-panel" data-step="3">
- <h2>Verify your contact information</h2><p class="lead">Both your primary mobile number and email address must be verified before registration can continue.</p>
- <label class="full-label">Mobile Number<div class="otp-row"><input id="phoneDisplay" disabled><button class="otp-btn" id="sendPhoneOtp">Send OTP</button></div></label>
- <label class="full-label" style="margin-top:12px">Mobile OTP<input id="phoneOtp" inputmode="numeric" maxlength="6" placeholder="6-digit OTP"></label><button class="secondary" id="verifyPhoneOtp">Verify Mobile OTP</button><div id="phoneVerified" class="otp-verified">✓ Mobile number verified</div>
+ <h2>Verify your email address</h2><p class="lead">Email verification is required before registration can continue. Mobile OTP verification is temporarily disabled.</p>
+ <div class="notice">Mobile number verification is <b>temporarily disabled</b>. Your contact number will still be saved with your member information.</div>
  <label class="full-label" style="margin-top:20px">Email Address<div class="otp-row"><input id="emailDisplay" disabled><button class="otp-btn" id="sendEmailOtp">Send OTP</button></div></label>
  <label class="full-label" style="margin-top:12px">Email OTP<input id="emailOtp" inputmode="numeric" maxlength="6" placeholder="6-digit OTP"></label><button class="secondary" id="verifyEmailOtp">Verify Email OTP</button><div id="emailVerified" class="otp-verified">✓ Email address verified</div>
- <div class="notice important">Prototype mode: OTPs are generated in the browser and displayed in a message so you can test the workflow. Actual SMS/email sending requires an SMS provider and email/backend service.</div>
+ <div class="notice important">A 6-digit OTP will be sent to the email address you provided. The OTP expires after 10 minutes and can only be used once.</div>
  <div class="reg-actions"><button class="secondary back">Back</button><button class="primary" id="toDependents">Continue</button></div>
 </section>
 <section class="reg-panel" data-step="4">
@@ -122,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const finish = document.querySelector("#finishRegistration");
   if (finish) {
     finish.onclick = async () => {
-      if(!phoneOK || !emailOK) return alert("Please verify your mobile number and email first.");
+      if(!emailOK) return alert("Please verify your email address first.");
       const deps=[...document.querySelectorAll(".dependent-box")].map(b=>({
         name:b.querySelector(".dname").value.trim(),
         relationship:b.querySelector(".drel").value,
@@ -159,6 +158,53 @@ document.addEventListener("DOMContentLoaded", () => {
       } finally { finish.disabled=false; finish.textContent="Complete Registration"; }
     };
   }
+});
+</script>
+
+
+<script>
+let carelinkEmailVerified = false;
+
+async function requestEmailOtp() {
+  const email = document.querySelector("#rEmail").value.trim();
+  if (!email) return alert("Please enter your email address first.");
+  const btn=document.querySelector("#sendEmailOtp");
+  btn.disabled=true; btn.textContent="Sending...";
+  try {
+    const r=await carelinkPost({action:"sendEmailOtp", email:email});
+    if(!r.ok) throw new Error(r.error || "Unable to send OTP.");
+    alert("Verification code sent. Please check your email, including your Spam folder.");
+  } catch(e) { alert(e.message); }
+  finally {btn.disabled=false;btn.textContent="Send OTP";}
+}
+
+async function confirmEmailOtp() {
+  const email=document.querySelector("#rEmail").value.trim();
+  const otp=document.querySelector("#emailOtp").value.trim();
+  if(!otp) return alert("Please enter the OTP sent to your email.");
+  const btn=document.querySelector("#verifyEmailOtp");
+  btn.disabled=true;btn.textContent="Verifying...";
+  try {
+    const r=await carelinkPost({action:"verifyEmailOtp",email:email,otp:otp});
+    if(!r.ok) throw new Error(r.error || "Incorrect or expired OTP.");
+    carelinkEmailVerified=true;
+    emailOK=true;
+    document.querySelector("#emailVerified").classList.add("show");
+    alert("Email address verified.");
+  } catch(e){alert(e.message);}
+  finally{btn.disabled=false;btn.textContent="Verify Email OTP";}
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+  const send=document.querySelector("#sendEmailOtp");
+  const verify=document.querySelector("#verifyEmailOtp");
+  const next=document.querySelector("#toDependents");
+  if(send) send.onclick=requestEmailOtp;
+  if(verify) verify.onclick=confirmEmailOtp;
+  if(next) next.onclick=()=>{
+    if(!carelinkEmailVerified) return alert("Please verify your email address first.");
+    go(4);
+  };
 });
 </script>
 
