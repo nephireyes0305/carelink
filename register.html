@@ -20,7 +20,7 @@ body{background:#f2f7f6;color:#314b55}.reg-header{background:#fff;border-bottom:
 <section class="reg-panel active" data-step="1">
  <div class="code-box"><h2>Enter Registration Code</h2><p class="lead">Your code must match an unused code issued by an administrator.</p>
  <label class="full-label">Registration Code<input id="regCode" placeholder="CARELINK-XXXXXX" maxlength="30"></label>
- <div class="notice important">For this prototype, sample valid codes are <b>CARELINK-DEMO01</b> and <b>CARELINK-DEMO02</b>. In production, this will be checked against the Registration Codes sheet/database.</div>
+ <div class="notice important">Registration codes are now checked against the <b>Registration Codes</b> sheet in the Carelink Google Sheet.</div>
  <button class="primary" id="verifyCodeBtn">Verify Registration Code</button><div id="codeResult" class="notice" style="display:none"></div></div>
 </section>
 <section class="reg-panel" data-step="2">
@@ -77,4 +77,89 @@ document.querySelector("#toDependents").onclick=()=>{if(!phoneOK||!emailOK)retur
 document.querySelector("#addRegDependent").onclick=()=>{let box=document.createElement("div");box.className="dependent-box";box.innerHTML=`<h4>Dependent</h4><div class="form-grid"><label>Full Name<input class="dname" required></label><label>Relationship<select class="drel"><option>Spouse</option><option>Child</option><option>Parent</option><option>Other</option></select></label><label>Birthdate<input class="dbirth" type="date" required></label><label>Gender<select class="dgender"><option>Male</option><option>Female</option><option>Other</option></select></label></div><p class="dep-meta">Date Added: Automatically recorded when registration is completed.</p><button class="secondary remove-dep" style="margin-top:10px">Remove</button>`;box.querySelector(".remove-dep").onclick=()=>box.remove();document.querySelector("#regDependents").appendChild(box)};
 document.querySelector("#finishRegistration").onclick=()=>{let now=new Date().toISOString().slice(0,10),deps=[...document.querySelectorAll(".dependent-box")].map(b=>({name:b.querySelector(".dname").value,relationship:b.querySelector(".drel").value,birthdate:b.querySelector(".dbirth").value,gender:b.querySelector(".dgender").value,dateAdded:now})).filter(d=>d.name);let data={code:document.querySelector("#regCode").value.toUpperCase(),username:document.querySelector("#rUsername").value,name:document.querySelector("#rName").value,address:document.querySelector("#rAddress").value,phone:document.querySelector("#rPhone").value,phone2:document.querySelector("#rPhone2").value,email:document.querySelector("#rEmail").value,birthdate:document.querySelector("#rBirthdate").value,gender:document.querySelector("#rGender").value,registered:now,dependents:deps};localStorage.setItem("carelink-prototype-registration",JSON.stringify(data));validCodes[data.code]=false;document.querySelector("#registrationSummary").innerHTML=`<div><span>Member</span><strong>${data.name}</strong></div><div><span>Username</span><strong>${data.username}</strong></div><div><span>Registration Date</span><strong>${now}</strong></div><div><span>Dependents Added</span><strong>${deps.length}</strong></div>`;go(5)};
 </script>
+
+<script>
+const CARELINK_API = "https://script.google.com/macros/s/AKfycbztrKqI5Xme2iRUF5L5Hfno3jHEWQvqFRlC3_WF7YgEL_7ieZyTmAWR5s0aTWw5cavs/exec";
+
+async function carelinkPost(payload) {
+  const response = await fetch(CARELINK_API, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload),
+    redirect: "follow"
+  });
+  const text = await response.text();
+  try { return JSON.parse(text); }
+  catch(e) { throw new Error("The Carelink backend did not return valid JSON."); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const verify = document.querySelector("#verifyCodeBtn");
+  if (verify) {
+    verify.onclick = async () => {
+      const code = document.querySelector("#regCode").value.trim().toUpperCase();
+      const resultBox = document.querySelector("#codeResult");
+      if (!code) return alert("Please enter your registration code.");
+      verify.disabled = true; verify.textContent = "Checking...";
+      try {
+        const result = await carelinkPost({action:"validateCode", code});
+        resultBox.style.display="block";
+        if(result.ok) {
+          resultBox.className="notice success-notice";
+          resultBox.textContent="✓ Registration code verified from the Carelink database.";
+          setTimeout(()=>go(2),450);
+        } else {
+          resultBox.className="notice important";
+          resultBox.textContent="This code is invalid, inactive, or has already been used.";
+        }
+      } catch(err) {
+        resultBox.style.display="block"; resultBox.className="notice important";
+        resultBox.textContent="Unable to contact the Carelink registration server. "+err.message;
+      } finally { verify.disabled=false; verify.textContent="Verify Registration Code"; }
+    };
+  }
+
+  const finish = document.querySelector("#finishRegistration");
+  if (finish) {
+    finish.onclick = async () => {
+      if(!phoneOK || !emailOK) return alert("Please verify your mobile number and email first.");
+      const deps=[...document.querySelectorAll(".dependent-box")].map(b=>({
+        name:b.querySelector(".dname").value.trim(),
+        relationship:b.querySelector(".drel").value,
+        birthdate:b.querySelector(".dbirth").value,
+        gender:b.querySelector(".dgender").value
+      })).filter(d=>d.name);
+      const payload={
+        action:"registerMember",
+        code:document.querySelector("#regCode").value.trim().toUpperCase(),
+        username:document.querySelector("#rUsername").value.trim(),
+        // Password is deliberately not sent to the Sheet backend until secure auth is implemented.
+        name:document.querySelector("#rName").value.trim(),
+        address:document.querySelector("#rAddress").value.trim(),
+        phone:document.querySelector("#rPhone").value.trim(),
+        phone2:document.querySelector("#rPhone2").value.trim(),
+        email:document.querySelector("#rEmail").value.trim(),
+        birthdate:document.querySelector("#rBirthdate").value,
+        gender:document.querySelector("#rGender").value,
+        dependents:deps
+      };
+      finish.disabled=true; finish.textContent="Creating Account...";
+      try {
+        const result=await carelinkPost(payload);
+        if(!result.ok) throw new Error(result.error || "Registration failed.");
+        const now=new Date().toISOString().slice(0,10);
+        document.querySelector("#registrationSummary").innerHTML=
+          `<div><span>Member</span><strong>${payload.name}</strong></div>
+           <div><span>Member ID</span><strong>${result.memberId}</strong></div>
+           <div><span>Registration Date</span><strong>${now}</strong></div>
+           <div><span>Dependents Added</span><strong>${deps.length}</strong></div>`;
+        go(5);
+      } catch(err) {
+        alert("Registration could not be completed. "+err.message);
+      } finally { finish.disabled=false; finish.textContent="Complete Registration"; }
+    };
+  }
+});
+</script>
+
 </body></html>
