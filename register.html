@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Register | Carelink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style/style.css">
+<style>
+body{background:#f2f7f6;color:#314b55}.reg-header{background:#fff;border-bottom:1px solid #dce7e7;padding:14px 0}.reg-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#153d50;font-weight:800}.reg-brand img{width:52px;height:52px;object-fit:contain}.reg-shell{max-width:920px;margin:45px auto 80px;padding:0 20px}.reg-title{text-align:center;margin-bottom:25px}.reg-title h1{font-family:"Playfair Display",serif;color:#123d4a;font-size:2.7rem}.reg-title p{color:#73848d;max-width:650px;margin:8px auto}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:25px 0}.step{padding:10px;border-radius:12px;background:#e4ecec;text-align:center;font-size:.68rem;font-weight:800;color:#7b8b91}.step.active{background:#1c6866;color:#fff}.reg-card{background:#fff;border:1px solid #dce6e6;border-radius:22px;padding:30px;box-shadow:0 16px 45px #173f4a12}.reg-panel{display:none}.reg-panel.active{display:block}.reg-card h2{font-family:"Playfair Display",serif;color:#123d4a;margin-bottom:6px}.reg-card .lead{color:#74858d;font-size:.8rem;margin-bottom:22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.form-grid label,.full-label{display:flex;flex-direction:column;gap:6px;font-size:.68rem;font-weight:800;color:#526973}.form-grid input,.form-grid select,.full-label input{border:1px solid #d5e1e2;border-radius:11px;padding:12px;font:inherit;font-size:.78rem;outline:none}.form-grid input:focus,.form-grid select:focus,.full-label input:focus{border-color:#438983;box-shadow:0 0 0 3px #43898314}.full{grid-column:1/-1}.reg-actions{display:flex;justify-content:space-between;gap:10px;margin-top:24px}.primary,.secondary,.otp-btn{border:0;border-radius:11px;padding:12px 18px;font:inherit;font-size:.74rem;font-weight:800;cursor:pointer}.primary{background:#164b55;color:#fff}.secondary{background:#e9f1f1;color:#42616b}.otp-btn{background:#eaf4f3;color:#216b68}.code-box{max-width:520px;margin:auto;text-align:center}.code-box input{text-transform:uppercase;text-align:center;font-size:1.1rem;letter-spacing:.15em}.notice{background:#f3f7f7;border:1px solid #dce7e7;border-radius:12px;padding:12px 14px;color:#6c7d85;font-size:.7rem;margin:15px 0}.success-notice{background:#edf8ef;color:#3e8151}.otp-row{display:grid;grid-template-columns:1fr auto;gap:8px}.otp-verified{font-size:.62rem;color:#408454;font-weight:800;margin-top:4px;display:none}.otp-verified.show{display:block}.dependent-box{border:1px solid #dce7e7;border-radius:14px;padding:16px;margin:12px 0}.dependent-box h4{color:#164b55}.dep-meta{font-size:.64rem;color:#84949a}.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}.summary div{background:#f5f8f8;border-radius:10px;padding:12px}.summary span{display:block;font-size:.6rem;color:#839199}.summary strong{font-size:.76rem;color:#244d59}.important{color:#936d20;background:#fff8e7;border-color:#f0dda5}.login-link{text-align:center;margin-top:18px;font-size:.75rem}.login-link a{color:#1f7470;font-weight:800}@media(max-width:650px){.steps{grid-template-columns:1fr 1fr}.form-grid,.summary{grid-template-columns:1fr}.full{grid-column:auto}.reg-card{padding:20px}.reg-title h1{font-size:2.2rem}}
+</style>
+</head>
+<body>
+<header class="reg-header"><div class="container"><a class="reg-brand" href="index.html"><img src="images/logo.jpg" alt="Carelink logo"><span>Carelink Community Welfare Services Inc.</span></a></div></header>
+<main class="reg-shell">
+<div class="reg-title"><span class="eyebrow">MEMBER REGISTRATION</span><h1>Create your Carelink account</h1><p>Registration requires a valid code issued by Carelink after your registration payment and initial donation have been confirmed.</p></div>
+<div class="steps"><div class="step active">1. Verify Code</div><div class="step">2. Member Details</div><div class="step">3. Verification</div><div class="step">4. Dependents</div></div>
+<div class="reg-card">
+<section class="reg-panel active" data-step="1">
+ <div class="code-box"><h2>Enter Registration Code</h2><p class="lead">Your code must match an unused code issued by an administrator.</p>
+ <label class="full-label">Registration Code<input id="regCode" placeholder="CARELINK-XXXXXX" maxlength="30"></label>
+ <div class="notice important">For this prototype, sample valid codes are <b>CARELINK-DEMO01</b> and <b>CARELINK-DEMO02</b>. In production, this will be checked against the Registration Codes sheet/database.</div>
+ <button class="primary" id="verifyCodeBtn">Verify Registration Code</button><div id="codeResult" class="notice" style="display:none"></div></div>
+</section>
+<section class="reg-panel" data-step="2">
+ <h2>Member Information</h2><p class="lead">Please provide complete and accurate information.</p>
+ <div class="form-grid">
+  <label>Username<input id="rUsername" required></label><label>Password<input id="rPassword" type="password" minlength="8" required></label>
+  <label>Full Name<input id="rName" required></label><label>Birthdate<input id="rBirthdate" type="date" required></label>
+  <label>Gender<select id="rGender" required><option value="">Select gender</option><option>Male</option><option>Female</option><option>Other</option></select></label>
+  <label>Contact Number<input id="rPhone" type="tel" placeholder="09XXXXXXXXX" required></label>
+  <label>Additional Number (Optional)<input id="rPhone2" type="tel" placeholder="Optional"></label><label>Working Email Address<input id="rEmail" type="email" required></label>
+  <label class="full">Complete Address<input id="rAddress" required></label>
+ </div>
+ <div class="notice">Passwords are not intended to be stored as plain text in the final system. Production authentication should use secure password hashing/authentication.</div>
+ <div class="reg-actions"><button class="secondary back">Back</button><button class="primary next-details">Continue to Verification</button></div>
+</section>
+<section class="reg-panel" data-step="3">
+ <h2>Verify your contact information</h2><p class="lead">Both your primary mobile number and email address must be verified before registration can continue.</p>
+ <label class="full-label">Mobile Number<div class="otp-row"><input id="phoneDisplay" disabled><button class="otp-btn" id="sendPhoneOtp">Send OTP</button></div></label>
+ <label class="full-label" style="margin-top:12px">Mobile OTP<input id="phoneOtp" inputmode="numeric" maxlength="6" placeholder="6-digit OTP"></label><button class="secondary" id="verifyPhoneOtp">Verify Mobile OTP</button><div id="phoneVerified" class="otp-verified">✓ Mobile number verified</div>
+ <label class="full-label" style="margin-top:20px">Email Address<div class="otp-row"><input id="emailDisplay" disabled><button class="otp-btn" id="sendEmailOtp">Send OTP</button></div></label>
+ <label class="full-label" style="margin-top:12px">Email OTP<input id="emailOtp" inputmode="numeric" maxlength="6" placeholder="6-digit OTP"></label><button class="secondary" id="verifyEmailOtp">Verify Email OTP</button><div id="emailVerified" class="otp-verified">✓ Email address verified</div>
+ <div class="notice important">Prototype mode: OTPs are generated in the browser and displayed in a message so you can test the workflow. Actual SMS/email sending requires an SMS provider and email/backend service.</div>
+ <div class="reg-actions"><button class="secondary back">Back</button><button class="primary" id="toDependents">Continue</button></div>
+</section>
+<section class="reg-panel" data-step="4">
+ <h2>Add Dependents <span style="font-size:.7rem;color:#84939a">(Optional)</span></h2><p class="lead">You may add dependents now or skip this step and add them later from your member portal.</p>
+ <div id="regDependents"></div>
+ <button class="secondary" id="addRegDependent">+ Add Dependent</button>
+ <div class="notice">The <b>Date Added as Dependent</b> is not editable. The system records the registration date automatically when the dependent is saved. This date starts that dependent's 30/120/180-day contestability countdown.</div>
+ <div class="reg-actions"><button class="secondary back">Back</button><button class="primary" id="finishRegistration">Complete Registration</button></div>
+</section>
+<section class="reg-panel" data-step="5">
+ <div class="code-box"><h2>Registration Complete</h2><div class="notice success-notice">✓ Your prototype account has been created successfully.</div>
+ <div class="summary" id="registrationSummary"></div>
+ <p class="lead" style="margin-top:18px">The production version will save this information to the Carelink database/Google Sheet and mark the registration code as used.</p>
+ <a class="primary" style="display:inline-block;text-decoration:none" href="members.html">Go to Member Portal</a></div>
+</section>
+</div>
+<div class="login-link">Already registered? <a href="index.html">Return to Login</a></div>
+</main>
+<script>
+const validCodes={"CARELINK-DEMO01":true,"CARELINK-DEMO02":true}; let step=1,phoneOK=false,emailOK=false,phoneCode="",emailCode="";
+const panels=[...document.querySelectorAll(".reg-panel")],steps=[...document.querySelectorAll(".step")];
+function go(n){step=n;panels.forEach(p=>p.classList.toggle("active",+p.dataset.step===n));steps.forEach((x,i)=>x.classList.toggle("active",i===Math.min(n,4)-1));window.scrollTo({top:0,behavior:"smooth"})}
+document.querySelectorAll(".back").forEach(b=>b.onclick=()=>go(Math.max(1,step-1)));
+document.querySelector("#verifyCodeBtn").onclick=()=>{let c=document.querySelector("#regCode").value.trim().toUpperCase(),r=document.querySelector("#codeResult");r.style.display="block";if(validCodes[c]){r.className="notice success-notice";r.textContent="✓ Valid registration code. You may continue.";setTimeout(()=>go(2),500)}else{r.className="notice important";r.textContent="This registration code is invalid, already used, or not yet activated."}};
+document.querySelector(".next-details").onclick=()=>{let ids=["rUsername","rPassword","rName","rBirthdate","rGender","rPhone","rEmail","rAddress"];if(ids.some(id=>!document.querySelector("#"+id).value.trim()))return alert("Please complete all required fields.");document.querySelector("#phoneDisplay").value=document.querySelector("#rPhone").value;document.querySelector("#emailDisplay").value=document.querySelector("#rEmail").value;go(3)};
+const otp=()=>String(Math.floor(100000+Math.random()*900000));
+document.querySelector("#sendPhoneOtp").onclick=()=>{phoneCode=otp();alert("Prototype Mobile OTP: "+phoneCode+"\\n\\nIn production, this will be sent by SMS.")};
+document.querySelector("#sendEmailOtp").onclick=()=>{emailCode=otp();alert("Prototype Email OTP: "+emailCode+"\\n\\nIn production, this will be sent to the member's email.")};
+document.querySelector("#verifyPhoneOtp").onclick=()=>{phoneOK=document.querySelector("#phoneOtp").value===phoneCode&&!!phoneCode;if(phoneOK)document.querySelector("#phoneVerified").classList.add("show");else alert("Incorrect or missing mobile OTP.")};
+document.querySelector("#verifyEmailOtp").onclick=()=>{emailOK=document.querySelector("#emailOtp").value===emailCode&&!!emailCode;if(emailOK)document.querySelector("#emailVerified").classList.add("show");else alert("Incorrect or missing email OTP.")};
+document.querySelector("#toDependents").onclick=()=>{if(!phoneOK||!emailOK)return alert("Please verify both your mobile number and email address first.");go(4)};
+document.querySelector("#addRegDependent").onclick=()=>{let box=document.createElement("div");box.className="dependent-box";box.innerHTML=`<h4>Dependent</h4><div class="form-grid"><label>Full Name<input class="dname" required></label><label>Relationship<select class="drel"><option>Spouse</option><option>Child</option><option>Parent</option><option>Other</option></select></label><label>Birthdate<input class="dbirth" type="date" required></label><label>Gender<select class="dgender"><option>Male</option><option>Female</option><option>Other</option></select></label></div><p class="dep-meta">Date Added: Automatically recorded when registration is completed.</p><button class="secondary remove-dep" style="margin-top:10px">Remove</button>`;box.querySelector(".remove-dep").onclick=()=>box.remove();document.querySelector("#regDependents").appendChild(box)};
+document.querySelector("#finishRegistration").onclick=()=>{let now=new Date().toISOString().slice(0,10),deps=[...document.querySelectorAll(".dependent-box")].map(b=>({name:b.querySelector(".dname").value,relationship:b.querySelector(".drel").value,birthdate:b.querySelector(".dbirth").value,gender:b.querySelector(".dgender").value,dateAdded:now})).filter(d=>d.name);let data={code:document.querySelector("#regCode").value.toUpperCase(),username:document.querySelector("#rUsername").value,name:document.querySelector("#rName").value,address:document.querySelector("#rAddress").value,phone:document.querySelector("#rPhone").value,phone2:document.querySelector("#rPhone2").value,email:document.querySelector("#rEmail").value,birthdate:document.querySelector("#rBirthdate").value,gender:document.querySelector("#rGender").value,registered:now,dependents:deps};localStorage.setItem("carelink-prototype-registration",JSON.stringify(data));validCodes[data.code]=false;document.querySelector("#registrationSummary").innerHTML=`<div><span>Member</span><strong>${data.name}</strong></div><div><span>Username</span><strong>${data.username}</strong></div><div><span>Registration Date</span><strong>${now}</strong></div><div><span>Dependents Added</span><strong>${deps.length}</strong></div>`;go(5)};
+</script>
+</body></html>

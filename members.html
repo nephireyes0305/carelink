@@ -1,13 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Carelink Member Portal">
 <title>Member Dashboard | Carelink</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style/style.css">
-</head>
-<body class="inner-page">
-<header class="site-header"><div class="container nav-wrap"><a href="index.html" class="brand"><img src="images/logo.jpg" alt="Carelink logo"><span>Carelink</span></a><a href="index.html" class="nav-cta">Log Out</a></div></header>
-<main class="inner-hero"><div class="container inner-hero-content"><span class="eyebrow">MEMBER PORTAL</span><h1>Welcome to your <em>Carelink Dashboard</em></h1><p>This member page is currently a placeholder. Your profile, benefits, assistance requests, membership details, and support information can be connected here.</p></div></main>
-<section class="section"><div class="container placeholder-page"><span class="placeholder-icon">♥</span><h2>Member dashboard coming soon</h2><p>The secure member area will be connected to the Carelink database and authentication system in a later phase.</p><div class="placeholder-grid"><div>My Profile</div><div>Membership &amp; Benefits</div><div>Assistance / Requests</div></div></div></section>
+<style>/* member portal embedded */
+.member-body{background:#eef5f5;color:#334957;padding-bottom:30px}.member-topbar{height:76px;background:#fff;border-bottom:1px solid #dfe8e8;position:sticky;top:0;z-index:1200}.member-topbar-inner{height:100%;display:flex;align-items:center;justify-content:space-between}.member-brand span{display:flex;flex-direction:column;line-height:1.1}.member-brand small{font-size:.62rem;color:#7c8d96}.member-top-actions,.member-mini{display:flex;align-items:center;gap:12px}.member-mini>div:last-child{display:flex;flex-direction:column}.member-mini strong{font-size:.78rem}.member-mini small{font-size:.65rem;color:#82919a}.avatar,.profile-avatar,.dependent-avatar{display:grid;place-items:center;border-radius:50%;font-weight:800;background:#dcebed;color:#235967}.avatar{width:38px;height:38px;font-size:.7rem}.icon-btn{border:1px solid #dce6e7;background:#f7fafa;width:40px;height:40px;border-radius:12px}.member-welcome{background:linear-gradient(135deg,#123f4a,#173a55);color:#fff;padding:45px 0 75px}.member-welcome-grid{display:grid;grid-template-columns:1fr auto;gap:35px;align-items:center}.portal-kicker{font-size:.65rem;letter-spacing:.15em;font-weight:800;color:#348297}.member-welcome .portal-kicker{color:#a9d9d5}.member-welcome h1{font-family:"Playfair Display",serif;font-size:3rem;line-height:1.08;margin:7px 0}.member-welcome h1 span{color:#e1b85d}.member-welcome p{max-width:680px;color:#c6d7dc;font-size:.88rem}.member-number-card{min-width:250px;background:#ffffff12;border:1px solid #ffffff24;border-radius:18px;padding:20px;display:flex;flex-direction:column}.member-number-card span,.member-number-card small{font-size:.62rem;color:#b8ccd1}.member-number-card strong{margin:5px 0}.member-layout{display:grid;grid-template-columns:205px 1fr;gap:24px;align-items:start;margin-top:-34px;padding-bottom:60px}.member-sidebar,.member-card,.eligibility-panel,.metric-card{background:#fff;border:1px solid #dce7e7;border-radius:18px;box-shadow:0 8px 24px #153d460b}.member-sidebar{padding:10px;position:sticky;top:95px}.member-nav{width:100%;border:0;background:none;display:flex;gap:12px;padding:13px;border-radius:11px;font:inherit;font-size:.78rem;font-weight:700;color:#627680;cursor:pointer}.member-nav.active,.member-nav:hover{background:#eaf4f3;color:#216b68}.logout-nav{margin-top:8px;color:#a85757}.member-section{display:none}.member-section.active{display:block}.member-section-heading,.card-title-row,.eligibility-head{display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.member-section-heading h2{font-family:"Playfair Display",serif;color:#102b4e;font-size:2rem}.status-pill,.paid-pill{background:#e8f5ec;color:#408454;border-radius:20px;padding:6px 10px;font-size:.66rem;font-weight:800}.eligibility-panel,.member-card{padding:22px;margin-bottom:18px}.eligibility-head h3,.member-card h3{color:#102b4e}.eligibility-head p,.card-copy{font-size:.73rem;color:#788993}.member-start-field{display:flex;flex-direction:column;font-size:.62rem;font-weight:700}.member-start-field input,.table-search{border:1px solid #d5e1e2;border-radius:9px;padding:8px;font:inherit;font-size:.72rem}.countdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.countdown-card{border:1px solid #e1e8e8;border-radius:15px;padding:18px}.countdown-icon{width:36px;height:36px;border-radius:10px;background:#edf6f5;color:#26716d;display:grid;place-items:center;margin-bottom:14px}.countdown-card>span{display:block;font-size:.7rem;font-weight:800;color:#71828b}.countdown-card>strong{display:inline-block;font-size:2.1rem;color:#163d50;margin:6px 4px 4px 0}.countdown-card>small,.countdown-card>p{font-size:.62rem;color:#84939a}.progress-track{height:5px;background:#edf1f1;border-radius:10px;overflow:hidden;margin:10px 0 6px}.progress-track div{height:100%;background:linear-gradient(90deg,#2c8176,#65ad55)}.countdown-card.eligible{background:#f2faf3}.countdown-card.eligible>strong{font-size:1.25rem;color:#3e8151}.eligibility-note,.record-note,.sample-warning{font-size:.65rem;padding:10px 12px;border-radius:10px;margin-top:14px;background:#f5f8f8;color:#71828c}.dashboard-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:18px}.news-feature{padding:17px;background:#f1f7f2;border-radius:14px;border-left:3px solid #d5a845}.news-tag{font-size:.55rem;font-weight:800;color:#8d6a20}.news-feature h4{color:#163d50;margin:6px 0}.news-feature p,.news-list strong{font-size:.72rem}.news-feature small,.news-list small{font-size:.6rem;color:#89979d}.news-list>div{display:grid;grid-template-columns:90px 1fr auto;gap:10px;padding:11px 3px;border-bottom:1px solid #edf0f0}.news-list span{font-size:.54rem;font-weight:800;color:#3c8982}.money-total{background:#123f4a;color:#fff;border-radius:14px;padding:19px}.money-total small,.money-total span{display:block;font-size:.62rem;color:#b9ced2}.money-total strong{display:block;font-size:1.8rem}.summary-row{display:flex;justify-content:space-between;padding:10px 2px;border-bottom:1px solid #edf0f0;font-size:.7rem}.member-primary-btn{border:0;background:#164b55;color:#fff;border-radius:10px;padding:11px 15px;font:inherit;font-size:.72rem;font-weight:800;cursor:pointer}.contribution-summary .member-primary-btn{width:100%;margin-top:14px}.impact-layout{display:grid;grid-template-columns:180px 1fr;gap:25px;align-items:center}.impact-ring{width:145px;height:145px;border-radius:50%;background:conic-gradient(#28766d 0 50%,#4b9a8c 50% 75%,#d5a845 75% 90%,#8bb59d 90%);display:grid;place-items:center;margin:auto;position:relative}.impact-ring:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#fff}.impact-ring div{z-index:2;text-align:center;display:flex;flex-direction:column}.impact-row{display:grid;grid-template-columns:1fr 40px;gap:5px;margin:9px 0}.impact-row>div:first-child{grid-column:1/-1;display:flex;justify-content:space-between;font-size:.68rem}.impact-track{height:7px;background:#edf1f1;border-radius:10px;overflow:hidden}.impact-track i{display:block;height:100%;background:#367f76}.impact-row small{text-align:right;font-size:.6rem}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:18px}.metric-card{padding:18px;display:flex;flex-direction:column}.metric-card span,.metric-card small{font-size:.64rem;color:#788a92}.metric-card strong{font-size:1.45rem;color:#173e4d}.responsive-table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:.68rem}th,td{padding:11px 9px;text-align:left;border-bottom:1px solid #edf0f0}th{background:#f6f8f8;color:#71818a}td button{border:0;background:#e9f3f2;color:#286e69;border-radius:7px;padding:5px 9px}.dependent-list{display:grid;gap:12px}.dependent-card{background:#fff;border:1px solid #dce7e7;border-radius:16px;padding:17px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:14px}.dependent-avatar{width:46px;height:46px;font-size:.7rem}.dependent-info{display:flex;flex-direction:column}.dependent-info span,.dependent-info small{font-size:.65rem}.edit-dependent{border:1px solid #d5e2e2;background:#fff;color:#346e70;border-radius:9px;padding:8px 11px;font:inherit;font-size:.64rem;font-weight:700}.profile-head{display:flex;gap:14px;align-items:center;border-bottom:1px solid #edf0f0;padding-bottom:17px;margin-bottom:17px}.profile-avatar{width:60px;height:60px}.profile-form{display:grid;grid-template-columns:1fr 1fr;gap:13px}.profile-form label,.dependent-modal label{display:flex;flex-direction:column;gap:5px;font-size:.66rem;font-weight:800}.profile-form input,.profile-form textarea,.dependent-modal input,.dependent-modal select{border:1px solid #d9e3e4;border-radius:10px;padding:10px;font:inherit;font-size:.74rem}.profile-form textarea{height:75px}.profile-form label:nth-of-type(5),.profile-form .member-primary-btn{grid-column:1/-1}.profile-form .member-primary-btn{width:max-content}.member-mobile-nav{display:none}.dependent-modal{padding:28px}.dependent-modal h2{font-family:"Playfair Display",serif;color:#102b4e;margin:5px 0 17px}.dependent-modal form{display:grid;gap:12px}
+@media(max-width:900px){.member-layout{grid-template-columns:1fr}.member-sidebar{display:none}.dashboard-grid{grid-template-columns:1fr}.member-mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(4,1fr);bottom:0;left:0;right:0;background:#fff;border-top:1px solid #dce5e5;z-index:1300;padding:7px}.member-mobile-nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;font-size:.8rem;color:#7b8b92}.member-mobile-nav button span{font-size:.54rem}.member-mobile-nav button.active{color:#26736e}}
+@media(max-width:650px){.member-welcome-grid,.countdown-grid,.metric-grid,.impact-layout{grid-template-columns:1fr}.member-welcome h1{font-size:2.35rem}.member-number-card{min-width:0}.eligibility-head,.member-section-heading{align-items:flex-start;flex-direction:column}.news-list>div{grid-template-columns:1fr}.dependent-card{grid-template-columns:auto 1fr}.edit-dependent{grid-column:1/-1}.profile-form{grid-template-columns:1fr}.profile-form label:nth-of-type(5),.profile-form .member-primary-btn{grid-column:auto}}
+
+.dependent-card{grid-template-columns:auto 1fr auto}
+.dependent-countdowns{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding-top:13px;border-top:1px solid #edf1f1}
+.dep-count{background:#f6f9f9;border-radius:10px;padding:9px 10px;display:flex;flex-direction:column}
+.dep-count span{font-size:.57rem;color:#74858d;font-weight:800}.dep-count strong{font-size:.9rem;color:#1e5260}.dep-count small{font-size:.54rem;color:#8c999e}
+.dep-count.eligible{background:#edf8ef}.dep-count.eligible strong{color:#3e8151}
+.field-help{font-weight:400;color:#84939a;font-size:.58rem}
+@media(max-width:650px){.dependent-countdowns{grid-template-columns:1fr}.dependent-card{grid-template-columns:auto 1fr}}
+</style></head>
+<body class="member-body">
+
+<header class="member-topbar">
+  <div class="container member-topbar-inner">
+    <a href="index.html" class="brand member-brand">
+      <img src="images/logo.jpg" alt="Carelink logo">
+      <span>Carelink <small>Member Portal</small></span>
+    </a>
+    <div class="member-top-actions">
+      <button class="icon-btn" type="button" aria-label="Notifications">🔔<span class="notification-dot"></span></button>
+      <div class="member-mini">
+        <div class="avatar">CR</div>
+        <div><strong>Carelink Member</strong><small>Active Member</small></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="member-welcome">
+    <div class="container member-welcome-grid">
+      <div>
+        <span class="portal-kicker">WELCOME BACK</span>
+        <h1>Hello, <span id="welcomeName">Carelink Member</span>.</h1>
+        <p>Here is your membership overview, contributions, dependents, eligibility status, and the latest Carelink community updates.</p>
+      </div>
+      <div class="member-number-card">
+        <span>MEMBERSHIP NUMBER</span>
+        <strong>CL-2026-000001</strong>
+        <small>Member since <span id="memberSinceText">September 17, 2026</span></small>
+      </div>
+    </div>
+  </section>
+
+  <div class="container member-layout">
+    <aside class="member-sidebar">
+      <button class="member-nav active" data-member-section="dashboard">⌂ <span>Dashboard</span></button>
+      <button class="member-nav" data-member-section="contributions">♡ <span>Contributions</span></button>
+      <button class="member-nav" data-member-section="dependents">♙ <span>Dependents</span></button>
+      <button class="member-nav" data-member-section="profile">◎ <span>My Profile</span></button>
+      <a class="member-nav logout-nav" href="index.html">× <span>Log Out</span></a>
+    </aside>
+
+    <div class="member-content">
+
+      <!-- DASHBOARD -->
+      <section class="member-section active" id="member-dashboard">
+        <div class="member-section-heading">
+          <div><span class="portal-kicker">OVERVIEW</span><h2>Member Dashboard</h2></div>
+          <span class="status-pill">● Active</span>
+        </div>
+
+        <div class="eligibility-panel">
+          <div class="eligibility-head">
+            <div>
+              <span class="portal-kicker">CONTESTABILITY / ELIGIBILITY PERIOD</span>
+              <h3>Your benefit countdown</h3>
+              <p>Countdowns are calculated from the member start date shown in your profile.</p>
+            </div>
+            <div class="member-start-field">
+              <label for="memberStartDate">Member start date</label>
+              <input type="date" id="memberStartDate" value="2026-09-17">
+            </div>
+          </div>
+
+          <div class="countdown-grid">
+            <article class="countdown-card accident">
+              <div class="countdown-icon">✚</div>
+              <span>Accident Death</span>
+              <strong id="accidentDays">30</strong>
+              <small id="accidentLabel">days remaining</small>
+              <div class="progress-track"><div id="accidentProgress"></div></div>
+              <p>30-day contestability period</p>
+            </article>
+            <article class="countdown-card normal">
+              <div class="countdown-icon">♥</div>
+              <span>Normal Death</span>
+              <strong id="normalDays">120</strong>
+              <small id="normalLabel">days remaining</small>
+              <div class="progress-track"><div id="normalProgress"></div></div>
+              <p>120-day contestability period</p>
+            </article>
+            <article class="countdown-card hospital">
+              <div class="countdown-icon">＋</div>
+              <span>Hospitalization</span>
+              <strong id="hospitalDays">180</strong>
+              <small id="hospitalLabel">days remaining</small>
+              <div class="progress-track"><div id="hospitalProgress"></div></div>
+              <p>180-day contestability period</p>
+            </article>
+          </div>
+          <div class="eligibility-note">ⓘ For this prototype, the countdown uses the membership start date saved on this browser. Final eligibility should be determined by Carelink's approved membership rules and database records.</div>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="member-card news-card">
+            <div class="card-title-row"><div><span class="portal-kicker">CARELINK NEWS</span><h3>Latest Updates</h3></div><button class="text-btn">View all</button></div>
+            <div class="news-feature">
+              <span class="news-tag">ANNOUNCEMENT</span>
+              <h4>Welcome to the Carelink Member Portal</h4>
+              <p>Important organizational announcements, welfare program updates, community activities, and member notices will appear here.</p>
+              <small>September 2026</small>
+            </div>
+            <div class="news-list">
+              <div><span>COMMUNITY</span><strong>Community welfare activities and partnership updates</strong><small>Coming soon</small></div>
+              <div><span>MEMBER NOTICE</span><strong>Membership reminders and important notices</strong><small>Coming soon</small></div>
+            </div>
+          </article>
+
+          <article class="member-card contribution-summary">
+            <div class="card-title-row"><div><span class="portal-kicker">MY CONTRIBUTIONS</span><h3>Contribution Summary</h3></div></div>
+            <div class="money-total"><small>Total contributions</small><strong>₱3,600.00</strong><span>Sample data</span></div>
+            <div class="summary-row"><span>This year</span><strong>₱3,600.00</strong></div>
+            <div class="summary-row"><span>Last contribution</span><strong>₱300.00</strong></div>
+            <button class="member-primary-btn" data-jump="contributions">View Contribution History →</button>
+          </article>
+        </div>
+
+        <article class="member-card impact-card">
+          <div class="card-title-row">
+            <div><span class="portal-kicker">TRANSPARENCY</span><h3>Where your contribution went</h3><p>Example allocation view for the member portal.</p></div>
+          </div>
+          <div class="impact-layout">
+            <div class="impact-ring"><div><strong>₱3,600</strong><span>Total</span></div></div>
+            <div class="impact-bars">
+              <div class="impact-row"><div><span>Emergency Member Assistance</span><strong>₱1,800</strong></div><div class="impact-track"><i style="width:50%"></i></div><small>50%</small></div>
+              <div class="impact-row"><div><span>Hospitalization Assistance</span><strong>₱900</strong></div><div class="impact-track"><i style="width:25%"></i></div><small>25%</small></div>
+              <div class="impact-row"><div><span>Bereavement Support</span><strong>₱540</strong></div><div class="impact-track"><i style="width:15%"></i></div><small>15%</small></div>
+              <div class="impact-row"><div><span>Community Welfare Programs</span><strong>₱360</strong></div><div class="impact-track"><i style="width:10%"></i></div><small>10%</small></div>
+            </div>
+          </div>
+          <p class="sample-warning">The amounts and allocation above are placeholders only. Connect this section to actual Carelink accounting/allocation records before publishing real member data.</p>
+        </article>
+      </section>
+
+      <!-- CONTRIBUTIONS -->
+      <section class="member-section" id="member-contributions">
+        <div class="member-section-heading"><div><span class="portal-kicker">MY ACCOUNT</span><h2>Contributions &amp; Donations</h2></div><button class="member-primary-btn small">Download Statement</button></div>
+        <div class="metric-grid">
+          <div class="metric-card"><span>Total Contributions</span><strong>₱3,600.00</strong><small>Sample data</small></div>
+          <div class="metric-card"><span>Contributions Made</span><strong>12</strong><small>Sample records</small></div>
+          <div class="metric-card"><span>Latest Contribution</span><strong>₱300.00</strong><small>Sep 2026</small></div>
+        </div>
+        <article class="member-card">
+          <div class="card-title-row"><div><span class="portal-kicker">HISTORY</span><h3>Contribution Records</h3></div><input class="table-search" type="search" placeholder="Search records"></div>
+          <div class="responsive-table">
+            <table>
+              <thead><tr><th>Date</th><th>Reference</th><th>Type</th><th>Amount</th><th>Status</th><th>Receipt</th></tr></thead>
+              <tbody>
+                <tr><td>Sep 05, 2026</td><td>CL-090526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
+                <tr><td>Aug 05, 2026</td><td>CL-080526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
+                <tr><td>Jul 05, 2026</td><td>CL-070526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="member-card">
+          <div class="card-title-row"><div><span class="portal-kicker">CONTRIBUTION IMPACT</span><h3>Allocation Details</h3></div></div>
+          <p class="card-copy">This area can later show the actual assistance case, program, fund, or community initiative supported by each eligible contribution, subject to Carelink's privacy and accounting rules.</p>
+        </article>
+      </section>
+
+      <!-- DEPENDENTS -->
+      <section class="member-section" id="member-dependents">
+        <div class="member-section-heading"><div><span class="portal-kicker">MEMBER RECORD</span><h2>My Dependents</h2></div><button class="member-primary-btn small" id="addDependentBtn">+ Add Dependent</button></div>
+        <div class="dependent-list" id="dependentList">
+          <article class="dependent-card" data-dependent>
+            <div class="dependent-avatar">AR</div>
+            <div class="dependent-info"><strong class="dep-name">Ana Reyes</strong><span class="dep-relation">Spouse</span><small>Birthdate: <span class="dep-birth">1995-04-12</span></small><small>Added as dependent: <span class="dep-added">2026-09-17</span></small></div>
+            <button class="edit-dependent">Edit Information</button>
+          </article>
+          <article class="dependent-card" data-dependent>
+            <div class="dependent-avatar">PR</div>
+            <div class="dependent-info"><strong class="dep-name">Paula Reyes</strong><span class="dep-relation">Child</span><small>Birthdate: <span class="dep-birth">2021-10-10</span></small><small>Added as dependent: <span class="dep-added">2026-09-17</span></small></div>
+            <button class="edit-dependent">Edit Information</button>
+          </article>
+        </div>
+        <div class="record-note">Dependent changes in this prototype are saved only in the current browser session. A production version should require authentication, validation, audit history, and database storage.</div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="member-section" id="member-profile">
+        <div class="member-section-heading"><div><span class="portal-kicker">PERSONAL INFORMATION</span><h2>My Profile</h2></div></div>
+        <article class="member-card profile-card">
+          <div class="profile-head"><div class="profile-avatar">CR</div><div><h3>Carelink Member</h3><span class="status-pill">● Active Member</span></div></div>
+          <form id="profileForm" class="profile-form">
+            <label>Full Name<input type="text" value="Carelink Member"></label>
+            <label>Membership Number<input type="text" value="CL-2026-000001" disabled></label>
+            <label>Email Address<input type="email" value="member@example.com"></label>
+            <label>Mobile Number<input type="tel" value="0917 000 0000"></label>
+            <label>Address<textarea>Bulacan, Philippines</textarea></label>
+            <label>Member Start Date<input type="date" value="2026-09-17" id="profileStartDate"></label>
+            <button class="member-primary-btn" type="submit">Save Profile Changes</button>
+          </form>
+        </article>
+      </section>
+    </div>
+  </div>
+</main>
+
+<nav class="member-mobile-nav">
+  <button class="active" data-member-section="dashboard">⌂<span>Home</span></button>
+  <button data-member-section="contributions">♡<span>Giving</span></button>
+  <button data-member-section="dependents">♙<span>Dependents</span></button>
+  <button data-member-section="profile">◎<span>Profile</span></button>
+</nav>
+
+<!-- Edit dependent modal -->
+<div class="modal-backdrop" id="dependentModal" aria-hidden="true">
+  <div class="modal dependent-modal">
+    <button class="modal-close" type="button" id="closeDependentModal">×</button>
+    <span class="portal-kicker">DEPENDENT RECORD</span>
+    <h2 id="dependentModalTitle">Update Dependent</h2>
+    <form id="dependentForm">
+      <label>Full Name<input id="depNameInput" type="text" required></label>
+      <label>Relationship<select id="depRelationInput" required><option>Spouse</option><option>Child</option><option>Parent</option><option>Other</option></select></label>
+      <label>Date of Birth<input id="depBirthInput" type="date" required></label>
+      
+      <button class="member-primary-btn" type="submit">Save Dependent Information</button>
+    </form>
+  </div>
+</div>
+
 <script src="js/script.js"></script>
-</body></html>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const buttons=document.querySelectorAll("[data-member-section]"),sections=document.querySelectorAll(".member-section");
+ const show=n=>{sections.forEach(s=>s.classList.toggle("active",s.id==="member-"+n));buttons.forEach(b=>b.classList.toggle("active",b.dataset.memberSection===n));window.scrollTo({top:0,behavior:"smooth"})};
+ buttons.forEach(b=>b.addEventListener("click",()=>show(b.dataset.memberSection)));
+ document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.jump)));
+ const start=document.querySelector("#memberStartDate"),profileStart=document.querySelector("#profileStartDate"),since=document.querySelector("#memberSinceText");
+ const parse=v=>{let [y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d)};
+ function eligibility(){
+  if(!start)return;let s=parse(start.value),n=new Date(),today=new Date(n.getFullYear(),n.getMonth(),n.getDate()),elapsed=Math.max(0,Math.floor((today-s)/86400000));
+  [["accident",30],["normal",120],["hospital",180]].forEach(([id,total])=>{let left=Math.max(0,total-elapsed),v=document.querySelector("#"+id+"Days"),l=document.querySelector("#"+id+"Label"),p=document.querySelector("#"+id+"Progress"),c=v.closest(".countdown-card");if(!left){v.textContent="Eligible";l.textContent="contestability period completed";c.classList.add("eligible")}else{v.textContent=left;l.textContent=left===1?"day remaining":"days remaining";c.classList.remove("eligible")}p.style.width=Math.min(100,elapsed/total*100)+"%"});
+  if(since)since.textContent=s.toLocaleDateString("en-PH",{year:"numeric",month:"long",day:"numeric"});
+ }
+ if(start){let saved=localStorage.getItem("carelink-member-start");if(saved)start.value=saved;if(profileStart)profileStart.value=start.value;eligibility();start.addEventListener("change",()=>{localStorage.setItem("carelink-member-start",start.value);if(profileStart)profileStart.value=start.value;eligibility()})}
+ document.querySelector("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();if(profileStart&&start){start.value=profileStart.value;localStorage.setItem("carelink-member-start",start.value);eligibility()}alert("Profile changes saved in this prototype.")});
+ const modal=document.querySelector("#dependentModal"),form=document.querySelector("#dependentForm"),list=document.querySelector("#dependentList");let editing=null;
+ function open(card){editing=card;if(card){document.querySelector("#dependentModalTitle").textContent="Update Dependent";document.querySelector("#depNameInput").value=card.querySelector(".dep-name").textContent;document.querySelector("#depRelationInput").value=card.querySelector(".dep-relation").textContent;document.querySelector("#depBirthInput").value=card.querySelector(".dep-birth").textContent}else{document.querySelector("#dependentModalTitle").textContent="Add Dependent";form.reset()}modal.classList.add("open")}
+ const close=()=>modal.classList.remove("open");document.querySelector("#addDependentBtn")?.addEventListener("click",()=>open(null));document.querySelector("#closeDependentModal")?.addEventListener("click",close);modal?.addEventListener("click",e=>{if(e.target===modal)close()});
+ function bind(){document.querySelectorAll(".edit-dependent").forEach(b=>b.onclick=()=>open(b.closest("[data-dependent]")))}bind();
+ form?.addEventListener("submit",e=>{e.preventDefault();let name=document.querySelector("#depNameInput").value.trim(),rel=document.querySelector("#depRelationInput").value,birth=document.querySelector("#depBirthInput").value;if(editing){editing.querySelector(".dep-name").textContent=name;editing.querySelector(".dep-relation").textContent=rel;editing.querySelector(".dep-birth").textContent=birth}else{let initials=name.split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase(),card=document.createElement("article");card.className="dependent-card";card.setAttribute("data-dependent","");card.innerHTML=`<div class="dependent-avatar">${initials}</div><div class="dependent-info"><strong class="dep-name">${name}</strong><span class="dep-relation">${rel}</span><small>Birthdate: <span class="dep-birth">${birth}</span></small></div><button class="edit-dependent">Edit Information</button>`;list.appendChild(card);bind()}close()});
+ document.querySelector(".table-search")?.addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll(".responsive-table tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")});
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const DAY = 86400000;
+  const parseDate = v => {
+    const a = (v || "").split("-").map(Number);
+    return a.length === 3 ? new Date(a[0], a[1]-1, a[2]) : null;
+  };
+  const daysElapsed = v => {
+    const d = parseDate(v);
+    if (!d) return 0;
+    const n = new Date(), today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
+    return Math.max(0, Math.floor((today-d)/DAY));
+  };
+  function benefitHTML(label,total,elapsed){
+    const left=Math.max(0,total-elapsed);
+    return `<div class="dep-count ${left===0?'eligible':''}"><span>${label}</span><strong>${left===0?'Eligible':left+' days'}</strong><small>${left===0?'Contestability completed':left===1?'1 day remaining':left+' days remaining'}</small></div>`;
+  }
+  function renderDependentCountdown(card){
+    let added = card.querySelector(".dep-added")?.textContent.trim();
+    if(!added) return;
+    let elapsed=daysElapsed(added), box=card.querySelector(".dependent-countdowns");
+    if(!box){box=document.createElement("div");box.className="dependent-countdowns";card.appendChild(box);}
+    box.innerHTML=benefitHTML("Accident Death",30,elapsed)+benefitHTML("Normal Death",120,elapsed)+benefitHTML("Hospitalization",180,elapsed);
+  }
+  function renderAll(){document.querySelectorAll("[data-dependent]").forEach(renderDependentCountdown)}
+  renderAll();
+
+  const modal=document.querySelector("#dependentModal");
+  const addedInput=document.querySelector("#depAddedInput");
+  document.querySelectorAll(".edit-dependent").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const card=btn.closest("[data-dependent]");
+      if(addedInput) addedInput.value=card.querySelector(".dep-added")?.textContent.trim() || new Date().toISOString().slice(0,10);
+    });
+  });
+  document.querySelector("#addDependentBtn")?.addEventListener("click",()=>{
+    if(addedInput) addedInput.value=new Date().toISOString().slice(0,10);
+  });
+
+  // Run after the original dependent form handler updates/adds the card.
+  document.querySelector("#dependentForm")?.addEventListener("submit",()=>{
+    const name=document.querySelector("#depNameInput")?.value.trim();
+    const added=addedInput?.value;
+    setTimeout(()=>{
+      const cards=[...document.querySelectorAll("[data-dependent]")];
+      const card=cards.find(c=>c.querySelector(".dep-name")?.textContent.trim()===name);
+      if(card && added){
+        let node=card.querySelector(".dep-added");
+        if(!node){
+          const sm=document.createElement("small");
+          sm.innerHTML='Added as dependent: <span class="dep-added"></span>';
+          card.querySelector(".dependent-info").appendChild(sm);
+          node=sm.querySelector(".dep-added");
+        }
+        node.textContent=added;
+        renderDependentCountdown(card);
+      }
+    },0);
+  });
+});
+</script>
+
+</body>
+</html>
