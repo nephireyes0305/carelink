@@ -66,7 +66,6 @@ const panels=[...document.querySelectorAll(".reg-panel")],steps=[...document.que
 function go(n){step=n;panels.forEach(p=>p.classList.toggle("active",+p.dataset.step===n));steps.forEach((x,i)=>x.classList.toggle("active",i===Math.min(n,4)-1));window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll(".back").forEach(b=>b.onclick=()=>go(Math.max(1,step-1)));
 document.querySelector("#verifyCodeBtn").onclick=()=>{let c=document.querySelector("#regCode").value.trim().toUpperCase(),r=document.querySelector("#codeResult");r.style.display="block";if(validCodes[c]){r.className="notice success-notice";r.textContent="✓ Valid registration code. You may continue.";setTimeout(()=>go(2),500)}else{r.className="notice important";r.textContent="This registration code is invalid, already used, or not yet activated."}};
-document.querySelector(".next-details").onclick=()=>{let ids=["rUsername","rPassword","rName","rBirthdate","rGender","rPhone","rEmail","rAddress"];if(ids.some(id=>!document.querySelector("#"+id).value.trim()))return alert("Please complete all required fields.");document.querySelector("#phoneDisplay").value=document.querySelector("#rPhone").value;document.querySelector("#emailDisplay").value=document.querySelector("#rEmail").value;go(3)};
 document.querySelector("#toDependents").onclick=()=>{if(!phoneOK||!emailOK)return alert("Please verify both your mobile number and email address first.");go(4)};
 document.querySelector("#addRegDependent").onclick=()=>{let box=document.createElement("div");box.className="dependent-box";box.innerHTML=`<h4>Dependent</h4><div class="form-grid"><label>Full Name<input class="dname" required></label><label>Relationship<select class="drel"><option>Spouse</option><option>Child</option><option>Parent</option><option>Other</option></select></label><label>Birthdate<input class="dbirth" type="date" required></label><label>Gender<select class="dgender"><option>Male</option><option>Female</option><option>Other</option></select></label></div><p class="dep-meta">Date Added: Automatically recorded when registration is completed.</p><button class="secondary remove-dep" style="margin-top:10px">Remove</button>`;box.querySelector(".remove-dep").onclick=()=>box.remove();document.querySelector("#regDependents").appendChild(box)};
 document.querySelector("#finishRegistration").onclick=()=>{let now=new Date().toISOString().slice(0,10),deps=[...document.querySelectorAll(".dependent-box")].map(b=>({name:b.querySelector(".dname").value,relationship:b.querySelector(".drel").value,birthdate:b.querySelector(".dbirth").value,gender:b.querySelector(".dgender").value,dateAdded:now})).filter(d=>d.name);let data={code:document.querySelector("#regCode").value.toUpperCase(),username:document.querySelector("#rUsername").value,name:document.querySelector("#rName").value,address:document.querySelector("#rAddress").value,phone:document.querySelector("#rPhone").value,phone2:document.querySelector("#rPhone2").value,email:document.querySelector("#rEmail").value,birthdate:document.querySelector("#rBirthdate").value,gender:document.querySelector("#rGender").value,registered:now,dependents:deps};localStorage.setItem("carelink-prototype-registration",JSON.stringify(data));validCodes[data.code]=false;document.querySelector("#registrationSummary").innerHTML=`<div><span>Member</span><strong>${data.name}</strong></div><div><span>Username</span><strong>${data.username}</strong></div><div><span>Registration Date</span><strong>${now}</strong></div><div><span>Dependents Added</span><strong>${deps.length}</strong></div>`;go(5)};
@@ -199,6 +198,62 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(next) next.onclick=()=>{
     if(!carelinkEmailVerified) return alert("Please verify your email address first.");
     go(4);
+  };
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const continueBtn = document.querySelector(".next-details");
+  if (!continueBtn) return;
+
+  continueBtn.type = "button";
+  continueBtn.disabled = false;
+
+  continueBtn.onclick = () => {
+    const required = [
+      ["rUsername","Username"],
+      ["rPassword","Password"],
+      ["rName","Full Name"],
+      ["rBirthdate","Birthdate"],
+      ["rGender","Gender"],
+      ["rPhone","Contact Number"],
+      ["rEmail","Email Address"],
+      ["rAddress","Complete Address"]
+    ];
+
+    for (const [id,label] of required) {
+      const el=document.getElementById(id);
+      if (!el || !String(el.value || "").trim()) {
+        alert("Please complete: " + label);
+        if (el) el.focus();
+        return;
+      }
+    }
+
+    const password=document.getElementById("rPassword").value;
+    if(password.length < 8){
+      alert("Password must contain at least 8 characters.");
+      document.getElementById("rPassword").focus();
+      return;
+    }
+
+    const email=document.getElementById("rEmail");
+    if(!email.checkValidity()){
+      alert("Please enter a valid working email address.");
+      email.focus();
+      return;
+    }
+
+    // Mobile number is collected, but mobile OTP is intentionally disabled.
+    const emailDisplay=document.getElementById("emailDisplay");
+    if(emailDisplay) emailDisplay.value=email.value.trim();
+
+    emailOK=false;
+    if(typeof carelinkEmailVerified !== "undefined") carelinkEmailVerified=false;
+    document.getElementById("emailVerified")?.classList.remove("show");
+    go(3);
   };
 });
 </script>
