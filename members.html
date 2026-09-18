@@ -21,7 +21,33 @@
 .dep-count.eligible{background:#edf8ef}.dep-count.eligible strong{color:#3e8151}
 .field-help{font-weight:400;color:#84939a;font-size:.58rem}
 @media(max-width:650px){.dependent-countdowns{grid-template-columns:1fr}.dependent-card{grid-template-columns:auto 1fr}}
-</style></head>
+</style>
+<style id="carelink-v832-modal-fix">
+.modal-backdrop{
+  position:fixed; inset:0; z-index:5000; display:none;
+  align-items:center; justify-content:center; padding:20px;
+  background:rgba(7,30,39,.62); backdrop-filter:blur(3px);
+}
+.modal-backdrop.show{display:flex!important}
+.modal-backdrop[aria-hidden="false"]{display:flex!important}
+.modal{
+  position:relative; width:min(620px,96vw); max-height:90vh; overflow:auto;
+  background:#fff; border:1px solid #dce7e7; border-radius:18px;
+  box-shadow:0 24px 70px rgba(0,0,0,.22);
+}
+.modal-close{
+  position:absolute; top:12px; right:12px; width:36px; height:36px;
+  border:0; border-radius:50%; background:#eef4f4; color:#34535c;
+  font-size:1.35rem; cursor:pointer; z-index:2;
+}
+.dependent-modal textarea{
+  min-height:100px; resize:vertical; border:1px solid #d9e3e4;
+  border-radius:10px; padding:10px; font:inherit; font-size:.74rem;
+}
+.dependent-modal input[type="file"]{background:#f7fafa}
+.member-primary-btn:disabled{opacity:.55;cursor:not-allowed}
+</style>
+</head>
 <body class="member-body" style="visibility:hidden">
 <script>
 const CARELINK_API_AUTH="https://script.google.com/macros/s/AKfycbztrKqI5Xme2iRUF5L5Hfno3jHEWQvqFRlC3_WF7YgEL_7ieZyTmAWR5s0aTWw5cavs/exec";
@@ -362,18 +388,26 @@ document.addEventListener("DOMContentLoaded",async()=>{
     catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent=old;}
   });
   const am=document.getElementById("assistanceModal");
-  document.getElementById("requestAssistanceBtn")?.addEventListener("click",()=>{refreshAssistanceSubjects();am.classList.add("show");am.setAttribute("aria-hidden","false")});
+  const openModal=el=>{if(!el)return;el.classList.add("show");el.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";};
+  const closeModal=el=>{if(!el)return;el.classList.remove("show");el.setAttribute("aria-hidden","true");document.body.style.overflow="";};
+  document.getElementById("requestAssistanceBtn")?.addEventListener("click",e=>{
+    e.preventDefault(); refreshAssistanceSubjects(); openModal(am);
+  });
   document.getElementById("assistType")?.addEventListener("change",refreshAssistanceSubjects);
-  document.getElementById("closeAssistanceModal")?.addEventListener("click",()=>{am.classList.remove("show");am.setAttribute("aria-hidden","true")});
+  document.getElementById("closeAssistanceModal")?.addEventListener("click",()=>closeModal(am));
+  am?.addEventListener("click",e=>{if(e.target===am)closeModal(am)});
   document.getElementById("assistanceForm")?.addEventListener("submit",async e=>{
     e.preventDefault();const files=[...document.getElementById("assistFiles").files];if(!files.length)return alert("Attach at least one document.");if(files.length>5)return alert("Maximum 5 files.");if(files.some(f=>f.size>5*1024*1024))return alert("Each file must be 5 MB or smaller.");if(files.reduce((s,f)=>s+f.size,0)>15*1024*1024)return alert("Total attachments must be 15 MB or smaller.");
     const attachments=await Promise.all(files.map(f=>new Promise((resolve,reject)=>{const rd=new FileReader();rd.onload=()=>resolve({name:f.name,mimeType:f.type,base64:String(rd.result).split(",")[1]});rd.onerror=reject;rd.readAsDataURL(f)})));
     const [subjectType,subjectId]=document.getElementById("assistSubject").value.split(":"),btn=e.submitter,old=btn.textContent;btn.disabled=true;btn.textContent="Submitting…";
-    try{const res=await authPost({action:"requestAssistance",token:sessionStorage.getItem("carelinkSessionToken"),assistanceType:document.getElementById("assistType").value,subjectType,subjectId,details:document.getElementById("assistDetails").value,attachments});if(!res.ok)throw new Error(res.error||"Unable to submit request.");alert("Request submitted. Request ID: "+res.requestId);e.target.reset();am.classList.remove("show");}
+    try{const res=await authPost({action:"requestAssistance",token:sessionStorage.getItem("carelinkSessionToken"),assistanceType:document.getElementById("assistType").value,subjectType,subjectId,details:document.getElementById("assistDetails").value,attachments});if(!res.ok)throw new Error(res.error||"Unable to submit request.");alert("Request submitted. Request ID: "+res.requestId);e.target.reset();closeModal(am);}
     catch(err){alert(err.message)}finally{btn.disabled=false;btn.textContent=old;}
   });
-  document.getElementById("addDependentBtn")?.addEventListener("click",()=>{document.getElementById("dependentModal").classList.add("show");document.getElementById("dependentModal").setAttribute("aria-hidden","false")});
-  document.getElementById("closeDependentModal")?.addEventListener("click",()=>{document.getElementById("dependentModal").classList.remove("show");document.getElementById("dependentModal").setAttribute("aria-hidden","true")});
+  const dm=document.getElementById("dependentModal");
+  document.getElementById("addDependentBtn")?.addEventListener("click",e=>{e.preventDefault();openModal(dm)});
+  document.getElementById("closeDependentModal")?.addEventListener("click",()=>closeModal(dm));
+  dm?.addEventListener("click",e=>{if(e.target===dm)closeModal(dm)});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal(am);closeModal(dm)}});
   document.getElementById("dependentForm")?.addEventListener("submit",async e=>{e.preventDefault();const btn=e.submitter,old=btn.textContent;btn.disabled=true;btn.textContent="Saving…";try{const res=await authPost({action:"addPortalDependent",token:sessionStorage.getItem("carelinkSessionToken"),dependent:{name:document.getElementById("depNameInput").value,relationship:document.getElementById("depRelationInput").value,birthdate:document.getElementById("depBirthInput").value,gender:document.getElementById("depGenderInput").value}});if(!res.ok)throw new Error(res.error||"Unable to add dependent.");alert("Dependent added. Membership ID: "+res.dependentId);location.reload()}catch(err){alert(err.message)}finally{btn.disabled=false;btn.textContent=old;}});
   const token=sessionStorage.getItem("carelinkSessionToken");
   if(!token)return;
