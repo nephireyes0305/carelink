@@ -52,8 +52,8 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
     <div class="member-top-actions">
       <button class="icon-btn" type="button" aria-label="Notifications">🔔<span class="notification-dot"></span></button>
       <div class="member-mini">
-        <div class="avatar">CR</div>
-        <div><strong>Carelink Member</strong><small>Active Member</small></div>
+        <div class="avatar" id="topAvatar">CL</div>
+        <div><strong id="topMemberName">Carelink Member</strong><small id="topMemberStatus">Active Member</small></div>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
       </div>
       <div class="member-number-card">
         <span>MEMBERSHIP NUMBER</span>
-        <strong>CL-2026-000001</strong>
+        <strong id="membershipNumber">—</strong>
         <small>Member since <span id="memberSinceText">September 17, 2026</span></small>
       </div>
     </div>
@@ -102,7 +102,7 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
             </div>
             <div class="member-start-field">
               <label for="memberStartDate">Member start date</label>
-              <input type="date" id="memberStartDate" value="2026-09-17">
+              <input type="date" id="memberStartDate" value="" readonly>
             </div>
           </div>
 
@@ -152,9 +152,9 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
 
           <article class="member-card contribution-summary">
             <div class="card-title-row"><div><span class="portal-kicker">MY CONTRIBUTIONS</span><h3>Contribution Summary</h3></div></div>
-            <div class="money-total"><small>Total contributions</small><strong>₱3,600.00</strong><span>Sample data</span></div>
-            <div class="summary-row"><span>This year</span><strong>₱3,600.00</strong></div>
-            <div class="summary-row"><span>Last contribution</span><strong>₱300.00</strong></div>
+            <div class="money-total"><small>Total contributions</small><strong id="dashTotalContributions">₱0.00</strong><span>From your contribution records</span></div>
+            <div class="summary-row"><span>This year</span><strong id="dashYearContributions">₱0.00</strong></div>
+            <div class="summary-row"><span>Last contribution</span><strong id="dashLatestContribution">—</strong></div>
             <button class="member-primary-btn" data-jump="contributions">View Contribution History →</button>
           </article>
         </div>
@@ -180,19 +180,17 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
       <section class="member-section" id="member-contributions">
         <div class="member-section-heading"><div><span class="portal-kicker">MY ACCOUNT</span><h2>Contributions &amp; Donations</h2></div><button class="member-primary-btn small">Download Statement</button></div>
         <div class="metric-grid">
-          <div class="metric-card"><span>Total Contributions</span><strong>₱3,600.00</strong><small>Sample data</small></div>
-          <div class="metric-card"><span>Contributions Made</span><strong>12</strong><small>Sample records</small></div>
-          <div class="metric-card"><span>Latest Contribution</span><strong>₱300.00</strong><small>Sep 2026</small></div>
+          <div class="metric-card"><span>Total Contributions</span><strong id="metricTotal">₱0.00</strong><small>Recorded contributions</small></div>
+          <div class="metric-card"><span>Contributions Made</span><strong id="metricCount">0</strong><small>Recorded payments</small></div>
+          <div class="metric-card"><span>Latest Contribution</span><strong id="metricLatest">—</strong><small id="metricLatestDate">No record yet</small></div>
         </div>
         <article class="member-card">
           <div class="card-title-row"><div><span class="portal-kicker">HISTORY</span><h3>Contribution Records</h3></div><input class="table-search" type="search" placeholder="Search records"></div>
           <div class="responsive-table">
             <table>
               <thead><tr><th>Date</th><th>Reference</th><th>Type</th><th>Amount</th><th>Status</th><th>Receipt</th></tr></thead>
-              <tbody>
-                <tr><td>Sep 05, 2026</td><td>CL-090526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
-                <tr><td>Aug 05, 2026</td><td>CL-080526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
-                <tr><td>Jul 05, 2026</td><td>CL-070526-001</td><td>Monthly Contribution</td><td>₱300.00</td><td><span class="paid-pill">Paid</span></td><td><button>View</button></td></tr>
+              <tbody id="contributionRows">
+                <tr><td colspan="6">Loading contribution records…</td></tr>
               </tbody>
             </table>
           </div>
@@ -207,33 +205,25 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
       <section class="member-section" id="member-dependents">
         <div class="member-section-heading"><div><span class="portal-kicker">MEMBER RECORD</span><h2>My Dependents</h2></div><button class="member-primary-btn small" id="addDependentBtn">+ Add Dependent</button></div>
         <div class="dependent-list" id="dependentList">
-          <article class="dependent-card" data-dependent>
-            <div class="dependent-avatar">AR</div>
-            <div class="dependent-info"><strong class="dep-name">Ana Reyes</strong><span class="dep-relation">Spouse</span><small>Birthdate: <span class="dep-birth">1995-04-12</span></small><small>Added as dependent: <span class="dep-added">2026-09-17</span></small></div>
-            <button class="edit-dependent">Edit Information</button>
-          </article>
-          <article class="dependent-card" data-dependent>
-            <div class="dependent-avatar">PR</div>
-            <div class="dependent-info"><strong class="dep-name">Paula Reyes</strong><span class="dep-relation">Child</span><small>Birthdate: <span class="dep-birth">2021-10-10</span></small><small>Added as dependent: <span class="dep-added">2026-09-17</span></small></div>
-            <button class="edit-dependent">Edit Information</button>
-          </article>
+          <article class="member-card"><p>Loading dependents…</p></article>
         </div>
-        <div class="record-note">Dependent changes in this prototype are saved only in the current browser session. A production version should require authentication, validation, audit history, and database storage.</div>
+        <div class="record-note">Dependent records shown here are loaded from the Carelink database. The Date Added is system-controlled and determines each dependent's contestability period.</div>
+        <div class="record-note" style="display:none">Dependent changes in this prototype are saved only in the current browser session. A production version should require authentication, validation, audit history, and database storage.</div>
       </section>
 
       <!-- PROFILE -->
       <section class="member-section" id="member-profile">
         <div class="member-section-heading"><div><span class="portal-kicker">PERSONAL INFORMATION</span><h2>My Profile</h2></div></div>
         <article class="member-card profile-card">
-          <div class="profile-head"><div class="profile-avatar">CR</div><div><h3>Carelink Member</h3><span class="status-pill">● Active Member</span></div></div>
+          <div class="profile-head"><div class="profile-avatar" id="profileAvatar">CL</div><div><h3 id="profileName">Carelink Member</h3><span class="status-pill">● Active Member</span></div></div>
           <form id="profileForm" class="profile-form">
-            <label>Full Name<input type="text" value="Carelink Member"></label>
-            <label>Membership Number<input type="text" value="CL-2026-000001" disabled></label>
-            <label>Email Address<input type="email" value="member@example.com"></label>
-            <label>Mobile Number<input type="tel" value="0917 000 0000"></label>
-            <label>Address<textarea>Bulacan, Philippines</textarea></label>
-            <label>Member Start Date<input type="date" value="2026-09-17" id="profileStartDate"></label>
-            <button class="member-primary-btn" type="submit">Save Profile Changes</button>
+            <label>Full Name<input id="profileFullName" type="text" value="" readonly></label>
+            <label>Membership Number<input id="profileMemberId" type="text" value="" disabled></label>
+            <label>Email Address<input id="profileEmail" type="email" value="" readonly></label>
+            <label>Mobile Number<input id="profileContact" type="tel" value="" readonly></label>
+            <label>Address<textarea id="profileAddress" readonly></textarea></label>
+            <label>Member Start Date<input type="date" value="" id="profileStartDate" readonly></label>
+            <small>Profile information is loaded from your Carelink member record.</small>
           </form>
         </article>
       </section>
@@ -265,88 +255,83 @@ async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",
 </div>
 
 <script src="js/script.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded",()=>{
- const buttons=document.querySelectorAll("[data-member-section]"),sections=document.querySelectorAll(".member-section");
- const show=n=>{sections.forEach(s=>s.classList.toggle("active",s.id==="member-"+n));buttons.forEach(b=>b.classList.toggle("active",b.dataset.memberSection===n));window.scrollTo({top:0,behavior:"smooth"})};
- buttons.forEach(b=>b.addEventListener("click",()=>show(b.dataset.memberSection)));
- document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.jump)));
- const start=document.querySelector("#memberStartDate"),profileStart=document.querySelector("#profileStartDate"),since=document.querySelector("#memberSinceText");
- const parse=v=>{let [y,m,d]=v.split("-").map(Number);return new Date(y,m-1,d)};
- function eligibility(){
-  if(!start)return;let s=parse(start.value),n=new Date(),today=new Date(n.getFullYear(),n.getMonth(),n.getDate()),elapsed=Math.max(0,Math.floor((today-s)/86400000));
-  [["accident",30],["normal",120],["hospital",180]].forEach(([id,total])=>{let left=Math.max(0,total-elapsed),v=document.querySelector("#"+id+"Days"),l=document.querySelector("#"+id+"Label"),p=document.querySelector("#"+id+"Progress"),c=v.closest(".countdown-card");if(!left){v.textContent="Eligible";l.textContent="contestability period completed";c.classList.add("eligible")}else{v.textContent=left;l.textContent=left===1?"day remaining":"days remaining";c.classList.remove("eligible")}p.style.width=Math.min(100,elapsed/total*100)+"%"});
-  if(since)since.textContent=s.toLocaleDateString("en-PH",{year:"numeric",month:"long",day:"numeric"});
- }
- if(start){let saved=localStorage.getItem("carelink-member-start");if(saved)start.value=saved;if(profileStart)profileStart.value=start.value;eligibility();start.addEventListener("change",()=>{localStorage.setItem("carelink-member-start",start.value);if(profileStart)profileStart.value=start.value;eligibility()})}
- document.querySelector("#profileForm")?.addEventListener("submit",e=>{e.preventDefault();if(profileStart&&start){start.value=profileStart.value;localStorage.setItem("carelink-member-start",start.value);eligibility()}alert("Profile changes saved in this prototype.")});
- const modal=document.querySelector("#dependentModal"),form=document.querySelector("#dependentForm"),list=document.querySelector("#dependentList");let editing=null;
- function open(card){editing=card;if(card){document.querySelector("#dependentModalTitle").textContent="Update Dependent";document.querySelector("#depNameInput").value=card.querySelector(".dep-name").textContent;document.querySelector("#depRelationInput").value=card.querySelector(".dep-relation").textContent;document.querySelector("#depBirthInput").value=card.querySelector(".dep-birth").textContent}else{document.querySelector("#dependentModalTitle").textContent="Add Dependent";form.reset()}modal.classList.add("open")}
- const close=()=>modal.classList.remove("open");document.querySelector("#addDependentBtn")?.addEventListener("click",()=>open(null));document.querySelector("#closeDependentModal")?.addEventListener("click",close);modal?.addEventListener("click",e=>{if(e.target===modal)close()});
- function bind(){document.querySelectorAll(".edit-dependent").forEach(b=>b.onclick=()=>open(b.closest("[data-dependent]")))}bind();
- form?.addEventListener("submit",e=>{e.preventDefault();let name=document.querySelector("#depNameInput").value.trim(),rel=document.querySelector("#depRelationInput").value,birth=document.querySelector("#depBirthInput").value;if(editing){editing.querySelector(".dep-name").textContent=name;editing.querySelector(".dep-relation").textContent=rel;editing.querySelector(".dep-birth").textContent=birth}else{let initials=name.split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase(),card=document.createElement("article");card.className="dependent-card";card.setAttribute("data-dependent","");card.innerHTML=`<div class="dependent-avatar">${initials}</div><div class="dependent-info"><strong class="dep-name">${name}</strong><span class="dep-relation">${rel}</span><small>Birthdate: <span class="dep-birth">${birth}</span></small></div><button class="edit-dependent">Edit Information</button>`;list.appendChild(card);bind()}close()});
- document.querySelector(".table-search")?.addEventListener("input",e=>{let q=e.target.value.toLowerCase();document.querySelectorAll(".responsive-table tbody tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")});
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const DAY = 86400000;
-  const parseDate = v => {
-    const a = (v || "").split("-").map(Number);
-    return a.length === 3 ? new Date(a[0], a[1]-1, a[2]) : null;
-  };
-  const daysElapsed = v => {
-    const d = parseDate(v);
-    if (!d) return 0;
-    const n = new Date(), today = new Date(n.getFullYear(), n.getMonth(), n.getDate());
-    return Math.max(0, Math.floor((today-d)/DAY));
-  };
-  function benefitHTML(label,total,elapsed){
-    const left=Math.max(0,total-elapsed);
-    return `<div class="dep-count ${left===0?'eligible':''}"><span>${label}</span><strong>${left===0?'Eligible':left+' days'}</strong><small>${left===0?'Contestability completed':left===1?'1 day remaining':left+' days remaining'}</small></div>`;
-  }
-  function renderDependentCountdown(card){
-    let added = card.querySelector(".dep-added")?.textContent.trim();
-    if(!added) return;
-    let elapsed=daysElapsed(added), box=card.querySelector(".dependent-countdowns");
-    if(!box){box=document.createElement("div");box.className="dependent-countdowns";card.appendChild(box);}
-    box.innerHTML=benefitHTML("Accident Death",30,elapsed)+benefitHTML("Normal Death",120,elapsed)+benefitHTML("Hospitalization",180,elapsed);
-  }
-  function renderAll(){document.querySelectorAll("[data-dependent]").forEach(renderDependentCountdown)}
-  renderAll();
 
-  const modal=document.querySelector("#dependentModal");
-  const addedInput=document.querySelector("#depAddedInput");
-  document.querySelectorAll(".edit-dependent").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const card=btn.closest("[data-dependent]");
-      if(addedInput) addedInput.value=card.querySelector(".dep-added")?.textContent.trim() || new Date().toISOString().slice(0,10);
-    });
-  });
-  document.querySelector("#addDependentBtn")?.addEventListener("click",()=>{
-    if(addedInput) addedInput.value=new Date().toISOString().slice(0,10);
-  });
+<script>
+const money=v=>new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP"}).format(Number(v||0));
+const fmtDate=v=>v?new Date(v+"T00:00:00").toLocaleDateString("en-PH",{year:"numeric",month:"short",day:"numeric"}):"—";
+const initials=n=>(n||"CL").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase();
 
-  // Run after the original dependent form handler updates/adds the card.
-  document.querySelector("#dependentForm")?.addEventListener("submit",()=>{
-    const name=document.querySelector("#depNameInput")?.value.trim();
-    const added=addedInput?.value;
-    setTimeout(()=>{
-      const cards=[...document.querySelectorAll("[data-dependent]")];
-      const card=cards.find(c=>c.querySelector(".dep-name")?.textContent.trim()===name);
-      if(card && added){
-        let node=card.querySelector(".dep-added");
-        if(!node){
-          const sm=document.createElement("small");
-          sm.innerHTML='Added as dependent: <span class="dep-added"></span>';
-          card.querySelector(".dependent-info").appendChild(sm);
-          node=sm.querySelector(".dep-added");
-        }
-        node.textContent=added;
-        renderDependentCountdown(card);
-      }
-    },0);
-  });
+function daysLeft(eligible){
+  if(!eligible)return null;
+  const e=new Date(eligible+"T00:00:00"), n=new Date(), t=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  return Math.max(0,Math.ceil((e-t)/86400000));
+}
+function setCountdown(id,eligible){
+  const left=daysLeft(eligible), v=document.getElementById(id+"Days"), l=document.getElementById(id+"Label");
+  if(!v||left===null)return;
+  v.textContent=left===0?"Eligible":left;
+  l.textContent=left===0?"contestability period completed":(left===1?"day remaining":"days remaining");
+}
+function depBenefit(label,eligible){
+  const left=daysLeft(eligible);
+  return `<div class="dep-count ${left===0?'eligible':''}"><span>${label}</span><strong>${left===0?'Eligible':(left??'—')+' days'}</strong><small>${left===0?'Contestability completed':'remaining'}</small></div>`;
+}
+function renderPortal(data){
+  const x=data.member, deps=data.dependents||[], cs=data.contributions||[], s=data.summary||{};
+  document.getElementById("welcomeName").textContent=x.name||x.username;
+  document.getElementById("topMemberName").textContent=x.name||x.username;
+  document.getElementById("topMemberStatus").textContent=(x.status||"Active")+" Member";
+  document.getElementById("topAvatar").textContent=initials(x.name);
+  document.getElementById("membershipNumber").textContent=x.memberId;
+  document.getElementById("memberSinceText").textContent=fmtDate(x.registrationDate);
+  document.getElementById("memberStartDate").value=x.registrationDate||"";
+  document.getElementById("profileStartDate").value=x.registrationDate||"";
+  document.getElementById("profileName").textContent=x.name||x.username;
+  document.getElementById("profileAvatar").textContent=initials(x.name);
+  document.getElementById("profileFullName").value=x.name||"";
+  document.getElementById("profileMemberId").value=x.memberId||"";
+  document.getElementById("profileEmail").value=x.email||"";
+  document.getElementById("profileContact").value=x.contact||"";
+  document.getElementById("profileAddress").value=x.address||"";
+  setCountdown("accident",x.accidentEligible); setCountdown("normal",x.normalEligible); setCountdown("hospital",x.hospitalEligible);
+
+  document.getElementById("dashTotalContributions").textContent=money(s.total);
+  document.getElementById("dashYearContributions").textContent=money(s.thisYear);
+  document.getElementById("dashLatestContribution").textContent=s.latest?money(s.latest.amount):"—";
+  document.getElementById("metricTotal").textContent=money(s.total);
+  document.getElementById("metricCount").textContent=s.count||0;
+  document.getElementById("metricLatest").textContent=s.latest?money(s.latest.amount):"—";
+  document.getElementById("metricLatestDate").textContent=s.latest?fmtDate(s.latest.date):"No record yet";
+
+  const dl=document.getElementById("dependentList");
+  dl.innerHTML=deps.length?deps.map(d=>`<article class="dependent-card" data-dependent>
+    <div class="dependent-avatar">${initials(d.name)}</div>
+    <div class="dependent-info"><strong class="dep-name">${escapeHtml(d.name)}</strong><span class="dep-relation">${escapeHtml(d.relationship)}</span>
+    <small>Birthdate: ${fmtDate(d.birthdate)}</small><small>Gender: ${escapeHtml(d.gender||"—")}</small>
+    <small>Added as dependent: ${fmtDate(d.dateAdded)}</small></div>
+    <div class="dependent-countdowns">${depBenefit("Accident Death",d.accidentEligible)}${depBenefit("Normal Death",d.normalEligible)}${depBenefit("Hospitalization",d.hospitalEligible)}</div>
+  </article>`).join(""):'<article class="member-card"><p>No dependents are currently registered under your membership.</p></article>';
+
+  const tb=document.getElementById("contributionRows");
+  tb.innerHTML=cs.length?cs.map(c=>`<tr><td>${fmtDate(c.date)}</td><td>${escapeHtml(c.reference||"—")}</td><td>${escapeHtml(c.type||"Contribution")}</td><td>${money(c.amount)}</td><td><span class="paid-pill">${escapeHtml(c.status||"Recorded")}</span></td><td>${c.receipt?'<span>Available</span>':'—'}</td></tr>`).join("")
+    :'<tr><td colspan="6">No contribution records found for this member.</td></tr>';
+}
+function escapeHtml(v){const d=document.createElement("div");d.textContent=String(v??"");return d.innerHTML;}
+
+document.addEventListener("DOMContentLoaded",async()=>{
+  const navs=document.querySelectorAll("[data-member-section]"), secs=document.querySelectorAll(".member-section");
+  const show=n=>{secs.forEach(s=>s.classList.toggle("active",s.id==="member-"+n));navs.forEach(b=>b.classList.toggle("active",b.dataset.memberSection===n));};
+  navs.forEach(b=>b.addEventListener("click",()=>show(b.dataset.memberSection)));
+  document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.jump)));
+  document.querySelector(".table-search")?.addEventListener("input",e=>{const q=e.target.value.toLowerCase();document.querySelectorAll("#contributionRows tr").forEach(r=>r.style.display=r.textContent.toLowerCase().includes(q)?"":"none")});
+
+  const token=sessionStorage.getItem("carelinkSessionToken");
+  if(!token)return;
+  try{
+    const data=await authPost({action:"getMemberPortalData",token});
+    if(!data.ok) throw new Error(data.error||"Unable to load member information.");
+    renderPortal(data);
+  }catch(err){alert("Unable to load your Carelink member information: "+err.message);}
 });
 </script>
 
