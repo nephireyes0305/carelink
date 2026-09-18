@@ -22,7 +22,26 @@
 .field-help{font-weight:400;color:#84939a;font-size:.58rem}
 @media(max-width:650px){.dependent-countdowns{grid-template-columns:1fr}.dependent-card{grid-template-columns:auto 1fr}}
 </style></head>
-<body class="member-body">
+<body class="member-body" style="visibility:hidden">
+<script>
+const CARELINK_API_AUTH="https://script.google.com/macros/s/AKfycbztrKqI5Xme2iRUF5L5Hfno3jHEWQvqFRlC3_WF7YgEL_7ieZyTmAWR5s0aTWw5cavs/exec";
+async function authPost(p){const r=await fetch(CARELINK_API_AUTH,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(p)});return r.json();}
+(async()=>{
+  const token=sessionStorage.getItem("carelinkSessionToken");
+  if(!token){location.replace("index.html");return;}
+  try{
+    const r=await authPost({action:"getSession",token});
+    if(!r.ok){sessionStorage.clear();location.replace("index.html");return;}
+    sessionStorage.setItem("carelinkMember",JSON.stringify(r.member||{}));
+    document.body.style.visibility="visible";
+    setTimeout(()=>{
+      const member=r.member||{};
+      document.querySelectorAll("[data-live-member-name]").forEach(el=>el.textContent=member.name||member.username||"Member");
+      document.querySelectorAll("[data-live-member-id]").forEach(el=>el.textContent=member.memberId||"");
+    },0);
+  }catch(e){sessionStorage.clear();location.replace("index.html");}
+})();
+</script>
 
 <header class="member-topbar">
   <div class="container member-topbar-inner">
@@ -331,5 +350,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<script>
+document.addEventListener("click",async(e)=>{
+  const btn=e.target.closest(".logout-nav");
+  if(!btn) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  const token=sessionStorage.getItem("carelinkSessionToken");
+  try{if(token) await authPost({action:"logout",token});}catch(_){}
+  sessionStorage.clear();
+  location.href="index.html";
+},true);
+</script>
 </body>
 </html>

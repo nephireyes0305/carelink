@@ -52,7 +52,7 @@ body{background:#f2f7f6;color:#314b55}.reg-header{background:#fff;border-bottom:
  <div class="reg-actions"><button class="secondary back">Back</button><button class="primary" id="finishRegistration">Complete Registration</button></div>
 </section>
 <section class="reg-panel" data-step="5">
- <div class="code-box"><h2>Registration Complete</h2><div class="notice success-notice">✓ Your prototype account has been created successfully.</div>
+ <div class="code-box"><h2>Registration Complete</h2><div class="notice success-notice">✓ Your Carelink member account has been created successfully.</div>
  <div class="summary" id="registrationSummary"></div>
  <p class="lead" style="margin-top:18px">The production version will save this information to the Carelink database/Google Sheet and mark the registration code as used.</p>
  <a class="primary" style="display:inline-block;text-decoration:none" href="members.html">Go to Member Portal</a></div>
@@ -73,6 +73,7 @@ document.querySelector("#finishRegistration").onclick=()=>{let now=new Date().to
 
 <script>
 const CARELINK_API = "https://script.google.com/macros/s/AKfycbztrKqI5Xme2iRUF5L5Hfno3jHEWQvqFRlC3_WF7YgEL_7ieZyTmAWR5s0aTWw5cavs/exec";
+let validatedRegistrationCode = sessionStorage.getItem("carelinkValidatedCode") || "";
 
 async function carelinkPost(payload) {
   const response = await fetch(CARELINK_API, {
@@ -124,9 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
       })).filter(d=>d.name);
       const payload={
         action:"registerMember",
-        code:document.querySelector("#regCode").value.trim().toUpperCase(),
+        registrationCode: validatedRegistrationCode || document.querySelector("#regCode").value.trim().toUpperCase(),
         username:document.querySelector("#rUsername").value.trim(),
-        // Password is deliberately not sent to the Sheet backend until secure auth is implemented.
+        password:document.querySelector("#rPassword").value,
         name:document.querySelector("#rName").value.trim(),
         address:document.querySelector("#rAddress").value.trim(),
         phone:document.querySelector("#rPhone").value.trim(),
@@ -146,6 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
            <div><span>Member ID</span><strong>${result.memberId}</strong></div>
            <div><span>Registration Date</span><strong>${now}</strong></div>
            <div><span>Dependents Added</span><strong>${deps.length}</strong></div>`;
+        sessionStorage.removeItem("carelinkValidatedCode");
         go(5);
       } catch(err) {
         alert("Registration could not be completed. "+err.message);
