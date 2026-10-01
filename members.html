@@ -277,7 +277,10 @@ const initials=n=>(n||"CL").split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0])
 
 function daysLeft(eligible){
   if(!eligible)return null;
-  const e=new Date(eligible+"T00:00:00"), n=new Date(), t=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  const e=new Date(eligible+"T00:00:00");
+  const liveNow=new Date();
+  const paused=window.carelinkBenefitsPausedAt?new Date(window.carelinkBenefitsPausedAt+"T00:00:00"):null;
+  const n=(paused&&!isNaN(paused))?paused:liveNow, t=new Date(n.getFullYear(),n.getMonth(),n.getDate());
   return Math.max(0,Math.ceil((e-t)/86400000));
 }
 function setCountdown(id,eligible){
@@ -293,9 +296,10 @@ function depBenefit(label,eligible){
 function renderPortal(data){
   window.carelinkPortalData=data;
   const x=data.member, deps=data.dependents||[], cs=data.contributions||[], s=data.summary||{};
+  window.carelinkBenefitsPausedAt=(String(x.status||"").toLowerCase()==="inactive" ? x.benefitsPausedAt : "");
   document.getElementById("welcomeName").textContent=x.name||x.username;
   document.getElementById("topMemberName").textContent=x.name||x.username;
-  document.getElementById("topMemberStatus").textContent=(x.status||"Active")+" Member";
+  document.getElementById("topMemberStatus").textContent=(x.status||"Active")+" Member"+(x.statusReason?" — "+x.statusReason:"");
   document.getElementById("topAvatar").textContent=initials(x.name);
   document.getElementById("membershipNumber").textContent=x.memberId;
   document.getElementById("memberSinceText").textContent=fmtDate(x.registrationDate);
